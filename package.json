@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "homepage": "https://emonbimantara.github.io/storyAppFinal/",
+  "homepage": "https://emonBimantara.github.io/storyAppFinal/",
   "scripts": {
     "start": "webpack serve",
     "build": "webpack",
