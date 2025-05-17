@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/storyApp_3/',
+    publicPath: '/storyAppFinal/',
     clean: true,
   },
   module: {

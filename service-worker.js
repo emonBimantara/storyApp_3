@@ -1,4 +1,4 @@
-const BASE = '/storyApp_3';
+const BASE = '/storyAppFinal';
 const CACHE_NAME = 'story-app-cache-v1';
 const urlsToCache = [
   `${BASE}/`,
