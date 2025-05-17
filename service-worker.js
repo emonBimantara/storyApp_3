@@ -1,13 +1,14 @@
+const BASE = '/storyApp_3';
 const CACHE_NAME = 'story-app-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/styles/main.css',
-  '/styles/transitions.css',
-  '/bundle.js',
+  `${BASE}/`,
+  `${BASE}/index.html`,
+  `${BASE}/manifest.json`,
+  `${BASE}/icons/icon-192x192.png`,
+  `${BASE}/icons/icon-512x512.png`,
+  `${BASE}/styles/main.css`,
+  `${BASE}/styles/transitions.css`,
+  `${BASE}/bundle.js`,
 ];
 
 self.addEventListener('install', function(event) {
