@@ -39,14 +39,4 @@ self.addEventListener('fetch', function(event) {
         return response || fetch(event.request);
       })
   );
-});
-
-self.addEventListener('push', function(event) {
-  let data = { title: 'Notifikasi', options: { body: 'Ada notifikasi baru!' } };
-  if (event.data) {
-    data = event.data.json();
-  }
-  event.waitUntil(
-    self.registration.showNotification(data.title, data.options)
-  );
 }); 
