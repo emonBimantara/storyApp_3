@@ -6,8 +6,6 @@ const urlsToCache = [
   `${BASE}/manifest.json`,
   `${BASE}/icons/icon-192x192.png`,
   `${BASE}/icons/icon-512x512.png`,
-  `${BASE}/styles/main.css`,
-  `${BASE}/styles/transitions.css`,
   `${BASE}/bundle.js`,
 ];
 
