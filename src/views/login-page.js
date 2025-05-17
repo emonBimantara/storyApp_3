@@ -17,6 +17,7 @@ const LoginPage = {
             </div>
             <button type="submit">Login</button>
             <p>Belum punya akun? <a href="#/register">Daftar di sini</a></p>
+            <div id="offline-login-msg" style="display:none; color:#e74c3c; text-align:center; margin-top:1rem;">Kamu sedang offline. Login tidak bisa dilakukan.</div>
           </form>
         </div>
       </div>
@@ -25,13 +26,18 @@ const LoginPage = {
 
   async afterRender() {
     const loginForm = document.getElementById('login-form');
-    
+    const offlineMsg = document.getElementById('offline-login-msg');
+    if (!navigator.onLine) {
+      offlineMsg.style.display = 'block';
+    }
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+      if (!navigator.onLine) {
+        offlineMsg.style.display = 'block';
+        return;
+      }
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-
       try {
         await LoginPagePresenter.login(email, password);
         window.location.hash = '/';

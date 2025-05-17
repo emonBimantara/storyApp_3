@@ -3,6 +3,12 @@ import './styles/transitions.css';
 import routes from './routes.js';
 import 'leaflet/dist/leaflet.css';
 import Auth from './src/utils/auth.js';
+import AppShell from './src/views/app-shell.js';
+
+// Render Application Shell sekali saja
+if (!document.getElementById('main-content')) {
+  document.body.innerHTML = AppShell.render();
+}
 
 const main = document.getElementById('main-content');
 const skipLink = document.querySelector('.skip-to-content');
@@ -25,14 +31,15 @@ function parseActiveUrl() {
 
 function renderNavigation() {
   const nav = document.querySelector('nav');
+  if (!nav) return;
   const user = Auth.getUser();
-  
   nav.innerHTML = `
     <div class="nav-wrapper">
       <a href="#/" class="brand-logo">Story App</a>
       <ul class="right">
         ${user ? `
           <li><a href="#/add">Tambah Cerita</a></li>
+          <li><a href="#/offline-stories">Offline Stories</a></li>
           <li><a href="#" id="logout">Logout</a></li>
         ` : `
           <li><a href="#/login">Login</a></li>
@@ -41,7 +48,6 @@ function renderNavigation() {
       </ul>
     </div>
   `;
-
   const logoutButton = document.getElementById('logout');
   if (logoutButton) {
     logoutButton.addEventListener('click', (e) => {
@@ -55,24 +61,20 @@ function renderNavigation() {
 async function renderPage() {
   const activeRoute = parseActiveUrl();
   const page = routes[activeRoute];
-
   if (page) {
     if (page.checkAuth && !Auth.isAuthenticated()) {
       window.location.hash = '/login';
       return;
     }
-
     try {
       if (document.startViewTransition) {
         const transition = document.startViewTransition(async () => {
           main.innerHTML = await page.render();
           if (page.afterRender) await page.afterRender();
         });
-
         transition.ready.then(() => {
           console.log('View transition is ready');
         });
-
         transition.finished.then(() => {
           console.log('View transition is finished');
         });
@@ -87,9 +89,9 @@ async function renderPage() {
   } else {
     main.innerHTML = `<h2>404 Halaman Tidak Ditemukan</h2>`;
   }
-
   renderNavigation();
 }
 
 window.addEventListener('hashchange', renderPage);
-window.addEventListener('load', renderPage);
+// Panggil renderPage setelah shell benar-benar ada di DOM
+requestAnimationFrame(renderPage);

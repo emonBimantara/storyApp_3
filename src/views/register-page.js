@@ -21,6 +21,7 @@ const RegisterPage = {
             </div>
             <button type="submit">Register</button>
             <p>Sudah punya akun? <a href="#/login">Login di sini</a></p>
+            <div id="offline-register-msg" style="display:none; color:#e74c3c; text-align:center; margin-top:1rem;">Kamu sedang offline. Register tidak bisa dilakukan.</div>
           </form>
         </div>
       </div>
@@ -29,14 +30,19 @@ const RegisterPage = {
 
   async afterRender() {
     const registerForm = document.getElementById('register-form');
-    
+    const offlineMsg = document.getElementById('offline-register-msg');
+    if (!navigator.onLine) {
+      offlineMsg.style.display = 'block';
+    }
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+      if (!navigator.onLine) {
+        offlineMsg.style.display = 'block';
+        return;
+      }
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-
       try {
         await RegisterPagePresenter.register(name, email, password);
         alert('Registrasi berhasil! Silakan login.');

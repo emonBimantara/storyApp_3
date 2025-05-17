@@ -8,15 +8,19 @@ const HomePage = {
         <h2>Daftar Cerita</h2>
         <div class="story-list" id="story-list"></div>
         <div id="map" style="width: 100%; height: 400px;"></div>
+        <div id="offline-message" style="display:none; color:#e74c3c; text-align:center; margin-top:1rem;">Kamu sedang offline. Data yang tampil adalah data terakhir yang tersimpan.</div>
       </div>
     `;
   },
 
   async afterRender() {
+    console.log('HomePage afterRender dipanggil');
     try {
       const stories = await HomePagePresenter.loadStories();
+      console.log('HomePagePresenter.loadStories selesai, jumlah:', stories.length);
       const listContainer = document.getElementById('story-list');
       const mapContainer = document.getElementById('map');
+      const offlineMsg = document.getElementById('offline-message');
       
       listContainer.innerHTML = '';
 
@@ -26,16 +30,25 @@ const HomePage = {
         this.map.invalidateSize();
       });
 
-      stories.forEach((story) => {
-        const storyItem = document.createElement('story-item');
-        storyItem.story = story;
-        listContainer.appendChild(storyItem);
-        
-        this._addMarkerToMap(story);
-      });
+      if (stories.length === 0) {
+        listContainer.innerHTML = '<p style="text-align:center; color:#888;">Tidak ada cerita yang bisa ditampilkan.</p>';
+      } else {
+        stories.forEach((story) => {
+          const storyItem = document.createElement('story-item');
+          storyItem.story = story;
+          listContainer.appendChild(storyItem);
+          this._addMarkerToMap(story);
+        });
+      }
+
+      // Tampilkan pesan offline jika tidak ada koneksi
+      if (!navigator.onLine) {
+        offlineMsg.style.display = 'block';
+      }
     } catch (error) {
       console.error('Error in HomePage afterRender:', error);
-      alert('Gagal memuat cerita.');
+      document.getElementById('story-list').innerHTML = '<p style="text-align:center; color:#e74c3c;">Gagal memuat cerita. Cek koneksi internet kamu.</p>';
+      document.getElementById('offline-message').style.display = 'block';
     }
   },
 
